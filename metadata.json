@@ -1,0 +1,5 @@
+{
+  "name": "My LEGO Collection Manager",
+  "description": "A web application designed for families to manage their LEGO collection. Easily view all your sets in one place, add new ones, and access official LEGO pages for building instructions and more.",
+  "requestFramePermissions": []
+}
