@@ -10,7 +10,6 @@ import { importJsonFile } from './utils/importJson';
 
 const REBRICKABLE_API_URL = 'https://rebrickable.com/api/v3/lego/sets/';
 const REBRICKABLE_THEMES_URL = 'https://rebrickable.com/api/v3/lego/themes/';
-const DEFAULT_API_KEY = 'cff5c9560dc75bbc752abb64960b5f90';
 
 // Cache for theme names to avoid repeated API calls
 const themeCache: Record<number, string> = {};
@@ -71,9 +70,15 @@ const App: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
-  const [apiKey, setApiKey] = useState(DEFAULT_API_KEY);
+  const [apiKey, setApiKey] = useState('');
 
   const fetchSetDetails = async (set: LegoSet): Promise<LegoSet> => {
+    // Check if API key is configured
+    if (!apiKey || apiKey.trim() === '') {
+      console.warn('No API key configured. Skipping fetch for set:', set.code);
+      return set;
+    }
+
     try {
       const setCodeForApi = set.code.includes('-') ? set.code : `${set.code}-1`;
       const response = await fetch(`${REBRICKABLE_API_URL}${setCodeForApi}/`, {
@@ -155,6 +160,13 @@ const App: React.FC = () => {
   }, []);
 
   const handleSync = async () => {
+      // Check if API key is configured
+      if (!apiKey || apiKey.trim() === '') {
+        alert('⚠️ API Key Required\n\nPlease configure your Rebrickable API key first.\n\n1. Click the User Profile icon (👤)\n2. Enter your free API key from rebrickable.com/api\n3. Save and try syncing again');
+        setIsProfileOpen(true);
+        return;
+      }
+
       setIsSyncing(true);
       try {
           const currentSets = await db.getAllSets();
@@ -175,6 +187,15 @@ const App: React.FC = () => {
 
   const handleAddSet = async (data: { code: string; name: string; productUrl?: string }) => {
     setIsAddModalOpen(false);
+
+    // Warn if API key is not configured
+    if (!apiKey || apiKey.trim() === '') {
+      const proceed = confirm('⚠️ No API Key Configured\n\nYou can add the set, but details from Rebrickable won\'t be fetched automatically.\n\nTo fetch details later:\n1. Configure your API key in User Profile (👤)\n2. Click the Sync button (🔄)\n\nDo you want to add the set anyway?');
+      if (!proceed) {
+        return;
+      }
+    }
+
     try {
         const existingSet = await db.getSet(data.code);
         if (existingSet) {
@@ -189,14 +210,14 @@ const App: React.FC = () => {
             legoName: 'Loading...',
             exists: true,
         };
-        
+
         // Optimistic UI update
         setSets(prev => [newSetBase, ...prev]);
 
         const newSetWithDetails = await fetchSetDetails(newSetBase);
-        
+
         await db.putSet(newSetWithDetails);
-        
+
         // Final UI update
         setSets(prev => prev.map(s => s.code === newSetWithDetails.code ? newSetWithDetails : s));
     } catch(error) {
