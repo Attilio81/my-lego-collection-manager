@@ -182,9 +182,9 @@ This project is configured for automatic deployment to GitHub Pages using GitHub
    - Go to `Settings` → `Pages`
    - Under "Source", select `GitHub Actions`
 
-2. **Push to main branch**:
+2. **Push to master branch**:
    ```bash
-   git push origin main
+   git push origin master
    ```
 
 3. **Wait for deployment**:
