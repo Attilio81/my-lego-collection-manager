@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CloseIcon } from './Icons';
+import ImportJsonButton from './ImportJsonButton';
+import ClearDatabaseButton from './ClearDatabaseButton';
 import * as settings from '../utils/settings';
 
 interface UserProfileProps {
@@ -7,9 +9,20 @@ interface UserProfileProps {
   onClose: () => void;
   currentApiKey: string;
   onApiKeyUpdate: (apiKey: string) => void;
+  onImportJson: (file: File) => void;
+  onClearDatabase: () => void;
+  isLoading: boolean;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, currentApiKey, onApiKeyUpdate }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ 
+  isOpen, 
+  onClose, 
+  currentApiKey, 
+  onApiKeyUpdate,
+  onImportJson,
+  onClearDatabase,
+  isLoading 
+}) => {
   const [apiKey, setApiKey] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -152,6 +165,39 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, currentApiKe
                   Edit API Key
                 </button>
               )}
+            </div>
+          </div>
+
+          {/* Data Management Section */}
+          <div className="bg-gray-900 rounded-lg p-4 space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-200 mb-2">Data Management</h3>
+              <p className="text-sm text-gray-400 mb-4">
+                Import your collection from a JSON file or clear all data from the database.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <ImportJsonButton 
+                onImport={onImportJson}
+                disabled={isLoading}
+              />
+              <ClearDatabaseButton 
+                onClear={onClearDatabase}
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="bg-gray-800 rounded-md p-3 text-xs text-gray-400">
+              <p className="font-semibold text-gray-300 mb-1">JSON Format Example:</p>
+              <pre className="overflow-x-auto">
+{`{
+  "lego_sets": [
+    {"set_number": "76287"},
+    {"set_number": "60411"}
+  ]
+}`}
+              </pre>
             </div>
           </div>
 

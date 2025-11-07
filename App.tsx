@@ -2,8 +2,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { LegoSet } from './types';
 import LegoSetCard from './components/LegoSetCard';
 import AddSetForm from './components/AddSetForm';
-import ImportJsonButton from './components/ImportJsonButton';
-import ClearDatabaseButton from './components/ClearDatabaseButton';
 import UserProfile from './components/UserProfile';
 import { PlusIcon, SyncIcon, UserIcon } from './components/Icons';
 import * as db from './utils/db';
@@ -334,14 +332,6 @@ const App: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-grow sm:flex-grow-0 sm:w-64 bg-gray-700 text-white rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            <ImportJsonButton 
-              onImport={handleImportJson}
-              disabled={isLoading}
-            />
-            <ClearDatabaseButton 
-              onClear={handleClearDatabase}
-              disabled={isLoading}
-            />
             <button
                 onClick={handleSync}
                 disabled={isSyncing || isLoading}
@@ -430,6 +420,9 @@ const App: React.FC = () => {
         onClose={() => setIsProfileOpen(false)}
         currentApiKey={apiKey}
         onApiKeyUpdate={setApiKey}
+        onImportJson={handleImportJson}
+        onClearDatabase={handleClearDatabase}
+        isLoading={isLoading}
       />
     </div>
   );
