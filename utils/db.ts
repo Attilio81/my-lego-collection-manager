@@ -30,7 +30,7 @@ export const getSet = async (code: string): Promise<LegoSet | undefined> => {
     return db.get(STORE_NAME, code);
 };
 
-export const putSet = async (set: LegoSet): Promise<string> => {
+export const putSet = async (set: LegoSet): Promise<IDBValidKey> => {
   const db = await initDB();
   return db.put(STORE_NAME, set);
 };

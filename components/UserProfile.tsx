@@ -33,8 +33,18 @@ const UserProfile: React.FC<UserProfileProps> = ({
       setApiKey(currentApiKey);
       setIsEditing(false);
       setMessage(null);
+      
+      // Add ESC key listener
+      const handleEsc = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+      
+      document.addEventListener('keydown', handleEsc);
+      return () => document.removeEventListener('keydown', handleEsc);
     }
-  }, [isOpen, currentApiKey]);
+  }, [isOpen, currentApiKey, onClose]);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -77,19 +87,23 @@ const UserProfile: React.FC<UserProfileProps> = ({
     : 'Not set';
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4 overflow-y-auto" onClick={onClose}>
       <div 
-        className="bg-gray-800 text-white rounded-xl shadow-2xl w-full max-w-2xl transform transition-all" 
+        className="bg-gray-800 text-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto my-4 transform transition-all" 
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center p-6 border-b border-gray-700">
-          <h2 className="text-2xl font-bold text-yellow-400">User Profile</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white transition-colors">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b border-gray-700">
+          <h2 className="text-xl sm:text-2xl font-bold text-yellow-400">User Profile</h2>
+          <button 
+            onClick={onClose} 
+            className="text-gray-400 hover:text-white transition-colors p-1"
+            aria-label="Close"
+          >
             <CloseIcon className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* API Key Section */}
           <div className="bg-gray-900 rounded-lg p-4 space-y-4">
             <div>
@@ -139,20 +153,20 @@ const UserProfile: React.FC<UserProfileProps> = ({
               )}
             </div>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col sm:flex-row justify-end gap-3">
               {isEditing ? (
                 <>
                   <button
                     onClick={handleCancel}
                     disabled={isSaving}
-                    className="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-offset-gray-900 transition-colors disabled:opacity-50"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-gray-300 bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-offset-gray-900 transition-colors disabled:opacity-50"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-colors disabled:opacity-50"
+                    className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-colors disabled:opacity-50"
                   >
                     {isSaving ? 'Saving...' : 'Save'}
                   </button>
@@ -160,7 +174,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
               ) : (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-colors"
+                  className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-colors"
                 >
                   Edit API Key
                 </button>
@@ -212,10 +226,13 @@ const UserProfile: React.FC<UserProfileProps> = ({
           </div>
         </div>
 
-        <div className="p-6 border-t border-gray-700 flex justify-end">
+        <div className="p-4 sm:p-6 border-t border-gray-700 flex flex-col sm:flex-row gap-3 sm:gap-0 justify-between items-center sticky bottom-0 bg-gray-800">
+          <p className="text-xs text-gray-400 text-center sm:text-left">
+            Click outside or press ESC to close
+          </p>
           <button
             onClick={onClose}
-            className="px-6 py-2 text-sm font-medium text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 focus:ring-offset-gray-900 transition-colors"
+            className="w-full sm:w-auto px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-colors"
           >
             Close
           </button>
