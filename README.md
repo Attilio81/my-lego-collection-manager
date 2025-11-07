@@ -72,7 +72,9 @@ A modern, beautiful web application to manage and track your LEGO collection wit
 4. Details are fetched automatically from Rebrickable
 
 **Method 2: JSON Import**
-1. Prepare a JSON file with this format:
+1. Click the **User Profile** icon (👤) in the header
+2. In the "Data Management" section, click **Import JSON**
+3. Prepare a JSON file with this format:
    ```json
    {
      "lego_sets": [
@@ -82,9 +84,8 @@ A modern, beautiful web application to manage and track your LEGO collection wit
      ]
    }
    ```
-2. Click **Import JSON** button in the header
-3. Select your JSON file
-4. Click **Sync** button to fetch all details
+4. Select your JSON file
+5. Click **Sync** (🔄) to fetch all details from Rebrickable
 
 ### Managing Your Collection
 
@@ -92,14 +93,18 @@ A modern, beautiful web application to manage and track your LEGO collection wit
 - **Filter by theme**: Click theme buttons to filter (All, Marvel, City, Disney, etc.)
 - **Sync data**: Click the sync button (🔄) to update all sets with latest info
 - **Delete sets**: Click trash icon on any card to remove it
-- **Clear all**: Use "Clear DB" button to remove all sets (with double confirmation)
 
-### User Profile
+### User Profile & Settings
 
-Click the **User icon** (👤) in the header to:
-- View/edit your Rebrickable API key
-- See app information
-- Manage settings
+Click the **User Profile** icon (👤) in the header to access:
+
+- **API Key Management**: View/edit your Rebrickable API key (with masking for security)
+- **Data Management**: 
+  - **Import JSON**: Bulk import sets from a JSON file
+  - **Clear Database**: Remove all sets with double confirmation
+- **App Info**: View version and details
+
+**Mobile-friendly**: The profile modal is optimized for mobile devices and can be closed with the **X** button or **ESC** key.
 
 **Get a free Rebrickable API key**: [rebrickable.com/api](https://rebrickable.com/api/)
 
