@@ -1,20 +1,212 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🧱 My LEGO Collection Manager
 
-# Run and deploy your AI Studio app
+A modern, beautiful web application to manage and track your LEGO collection with automatic data fetching from Rebrickable API.
 
-This contains everything you need to run your app locally.
+![LEGO Collection Manager](https://img.shields.io/badge/LEGO-Collection%20Manager-yellow?style=for-the-badge&logo=lego)
+![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite)
 
-View your app in AI Studio: https://ai.studio/apps/drive/1LHR5ByLSAMrj59uFbG2BNNzrS3Q9qSsK
+## ✨ Features
 
-## Run Locally
+### 📦 Collection Management
+- **Add sets manually** - Simply enter the set number and fetch details automatically
+- **Import from JSON** - Bulk import your collection from a JSON file
+- **Delete sets** - Remove individual sets or clear entire database
+- **Search & Filter** - Search by name/code and filter by theme (Marvel, City, Disney, etc.)
 
-**Prerequisites:**  Node.js
+### 🔄 Rebrickable Integration
+- **Automatic sync** - Fetch official LEGO set details from Rebrickable API
+- **Theme hierarchy** - Automatically resolves parent themes (e.g., "Spidey" → "Marvel")
+- **Rich metadata** - Set names, images, product URLs, and themes
+- **Custom API key** - Use your own Rebrickable API key in the user profile
 
+### 💾 Local Storage
+- **IndexedDB** - All data stored locally in your browser
+- **Offline ready** - Works without internet after initial data fetch
+- **Privacy first** - No server, no tracking, all data stays on your device
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 🎨 Modern UI
+- **Dark theme** - Easy on the eyes with yellow/gold accents
+- **Responsive design** - Works on desktop, tablet, and mobile
+- **Smooth animations** - Polished user experience
+- **Card layout** - Beautiful display of your collection
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Node.js** (v18 or higher)
+- **npm** or **yarn**
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Attilio81/my-lego-collection-manager.git
+   cd my-lego-collection-manager
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start development server**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open in browser**
+   ```
+   http://localhost:3001
+   ```
+
+## 📖 Usage
+
+### Adding Sets
+
+**Method 1: Manual Entry**
+1. Click the **+** button (bottom right)
+2. Enter the set number (e.g., "76287", "60411")
+3. Click "Add Set"
+4. Details are fetched automatically from Rebrickable
+
+**Method 2: JSON Import**
+1. Prepare a JSON file with this format:
+   ```json
+   {
+     "lego_sets": [
+       {"set_number": "76287"},
+       {"set_number": "60411"},
+       {"set_number": "43260"}
+     ]
+   }
+   ```
+2. Click **Import JSON** button in the header
+3. Select your JSON file
+4. Click **Sync** button to fetch all details
+
+### Managing Your Collection
+
+- **Search**: Use the search bar to find sets by name or code
+- **Filter by theme**: Click theme buttons to filter (All, Marvel, City, Disney, etc.)
+- **Sync data**: Click the sync button (🔄) to update all sets with latest info
+- **Delete sets**: Click trash icon on any card to remove it
+- **Clear all**: Use "Clear DB" button to remove all sets (with double confirmation)
+
+### User Profile
+
+Click the **User icon** (👤) in the header to:
+- View/edit your Rebrickable API key
+- See app information
+- Manage settings
+
+**Get a free Rebrickable API key**: [rebrickable.com/api](https://rebrickable.com/api/)
+
+## 🛠️ Tech Stack
+
+- **React 19.2** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Styling (via CDN)
+- **IndexedDB** - Local storage (via `idb` package)
+- **Rebrickable API** - LEGO data source
+
+## 📁 Project Structure
+
+```
+my-lego-collection-manager/
+├── components/
+│   ├── AddSetForm.tsx          # Modal to add single set
+│   ├── ClearDatabaseButton.tsx # Button to clear all data
+│   ├── Icons.tsx                # SVG icon components
+│   ├── ImportJsonButton.tsx     # JSON import button
+│   ├── LegoSetCard.tsx          # Display card for each set
+│   └── UserProfile.tsx          # User profile modal
+├── data/
+│   └── initialData.ts           # Initial data (empty by default)
+├── utils/
+│   ├── db.ts                    # IndexedDB operations
+│   ├── importJson.ts            # JSON import logic
+│   └── settings.ts              # User settings storage
+├── App.tsx                      # Main application component
+├── types.ts                     # TypeScript type definitions
+├── index.tsx                    # App entry point
+└── vite.config.ts              # Vite configuration
+```
+
+## 🔧 Configuration
+
+### Port Configuration
+Default port is `3001`. To change it, edit `vite.config.ts`:
+```typescript
+server: {
+  port: 3001,
+  host: '0.0.0.0',
+}
+```
+
+### API Configuration
+Default Rebrickable API key is included. For heavy usage, get your own free key and add it in the User Profile.
+
+## 🏗️ Build for Production
+
+```bash
+# Build the app
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+The built files will be in the `dist/` directory.
+
+## 📝 Example JSON Import Format
+
+```json
+{
+  "lego_sets": [
+    {
+      "set_number": "43260",
+      "theme": "Disney",
+      "name": "Moana's Island Home",
+      "booklets": ["1", "2"]
+    },
+    {
+      "set_number": "76287"
+    }
+  ]
+}
+```
+
+**Note:** Only `set_number` is required. Other fields are optional and will be fetched from Rebrickable.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- **Rebrickable** for providing the comprehensive LEGO database API
+- **LEGO®** for creating amazing building sets (LEGO® is a trademark of the LEGO Group)
+- Built with ❤️ for LEGO enthusiasts
+
+## 📧 Contact
+
+Attilio - [@Attilio81](https://github.com/Attilio81)
+
+Project Link: [https://github.com/Attilio81/my-lego-collection-manager](https://github.com/Attilio81/my-lego-collection-manager)
+
+---
+
+**Note**: This is an unofficial fan project and is not affiliated with or endorsed by the LEGO Group.
