@@ -7,6 +7,12 @@ A modern, beautiful web application to manage and track your LEGO collection wit
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=for-the-badge&logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-6.2-646CFF?style=for-the-badge&logo=vite)
 
+## 🌐 Live Demo
+
+**Try it now:** [https://attilio81.github.io/my-lego-collection-manager/](https://attilio81.github.io/my-lego-collection-manager/)
+
+No installation required - just open the link and start managing your LEGO collection!
+
 ## ✨ Features
 
 ### 📦 Collection Management
@@ -165,6 +171,38 @@ npm run preview
 ```
 
 The built files will be in the `dist/` directory.
+
+## 🚀 Deploy to GitHub Pages
+
+This project is configured for automatic deployment to GitHub Pages using GitHub Actions.
+
+### Automatic Deployment
+
+1. **Enable GitHub Pages** in your repository settings:
+   - Go to `Settings` → `Pages`
+   - Under "Source", select `GitHub Actions`
+
+2. **Push to main branch**:
+   ```bash
+   git push origin main
+   ```
+
+3. **Wait for deployment**:
+   - GitHub Actions will automatically build and deploy
+   - Your site will be live at: `https://YOUR_USERNAME.github.io/my-lego-collection-manager/`
+
+### Manual Deployment
+
+If you prefer manual deployment:
+
+```bash
+# Build the app
+npm run build
+
+# Deploy the dist folder to gh-pages branch
+npm install -g gh-pages
+gh-pages -d dist
+```
 
 ## 📝 Example JSON Import Format
 
