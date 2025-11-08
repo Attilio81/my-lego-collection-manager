@@ -7,6 +7,8 @@ import { PlusIcon, SyncIcon, UserIcon } from './components/Icons';
 import * as db from './utils/db';
 import * as settings from './utils/settings';
 import { importJsonFile } from './utils/importJson';
+import { exportLibrary } from './utils/exportLibrary';
+import { importLibraryFile } from './utils/importLibrary';
 
 const REBRICKABLE_API_URL = 'https://rebrickable.com/api/v3/lego/sets/';
 const REBRICKABLE_THEMES_URL = 'https://rebrickable.com/api/v3/lego/themes/';
@@ -279,11 +281,11 @@ const App: React.FC = () => {
 
   const handleClearDatabase = async () => {
     const confirmMessage = 'Are you sure you want to DELETE ALL sets from your collection?\n\nThis action cannot be undone!';
-    
+
     if (window.confirm(confirmMessage)) {
       // Double confirmation for safety
       const doubleConfirm = window.confirm('Last chance! Click OK to permanently delete everything.');
-      
+
       if (doubleConfirm) {
         try {
           await db.clearAllSets();
@@ -294,6 +296,46 @@ const App: React.FC = () => {
           alert('An error occurred while clearing the database. Please try again.');
         }
       }
+    }
+  };
+
+  const handleExportLibrary = () => {
+    exportLibrary(sets);
+  };
+
+  const handleImportLibrary = async (file: File) => {
+    try {
+      const importedSets = await importLibraryFile(file);
+
+      if (importedSets.length === 0) {
+        alert('Nessun set trovato nel file di libreria.');
+        return;
+      }
+
+      // Check for duplicates
+      const existingSets = await db.getAllSets();
+      const existingCodes = new Set(existingSets.map(s => s.code));
+
+      const newSets = importedSets.filter(set => !existingCodes.has(set.code));
+      const duplicates = importedSets.length - newSets.length;
+
+      if (newSets.length === 0) {
+        alert('Tutti i set dal file esistono già nella tua collezione.');
+        return;
+      }
+
+      // Add all new sets with all their data (no API call needed)
+      await db.putAllSets([...existingSets, ...newSets]);
+      setSets([...existingSets, ...newSets]);
+
+      const message = duplicates > 0
+        ? `Importati ${newSets.length} set. ${duplicates} duplicati ignorati.`
+        : `Importati con successo ${newSets.length} set.`;
+
+      alert(message + '\n\nTutti i dati sono stati importati, non serve aggiornare da Rebrickable!');
+    } catch (error) {
+      console.error("Failed to import library:", error);
+      alert(`Errore nell'importazione: ${error instanceof Error ? error.message : 'Errore sconosciuto'}`);
     }
   };
   
@@ -443,6 +485,8 @@ const App: React.FC = () => {
         onApiKeyUpdate={setApiKey}
         onImportJson={handleImportJson}
         onClearDatabase={handleClearDatabase}
+        onExportLibrary={handleExportLibrary}
+        onImportLibrary={handleImportLibrary}
         isLoading={isLoading}
       />
     </div>

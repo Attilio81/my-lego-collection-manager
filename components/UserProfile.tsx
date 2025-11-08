@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CloseIcon } from './Icons';
 import ImportJsonButton from './ImportJsonButton';
 import ClearDatabaseButton from './ClearDatabaseButton';
+import ExportLibraryButton from './ExportLibraryButton';
+import ImportLibraryButton from './ImportLibraryButton';
 import * as settings from '../utils/settings';
 
 interface UserProfileProps {
@@ -11,17 +13,21 @@ interface UserProfileProps {
   onApiKeyUpdate: (apiKey: string) => void;
   onImportJson: (file: File) => void;
   onClearDatabase: () => void;
+  onExportLibrary: () => void;
+  onImportLibrary: (file: File) => void;
   isLoading: boolean;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ 
-  isOpen, 
-  onClose, 
-  currentApiKey, 
+const UserProfile: React.FC<UserProfileProps> = ({
+  isOpen,
+  onClose,
+  currentApiKey,
   onApiKeyUpdate,
   onImportJson,
   onClearDatabase,
-  isLoading 
+  onExportLibrary,
+  onImportLibrary,
+  isLoading
 }) => {
   const [apiKey, setApiKey] = useState('');
   const [isEditing, setIsEditing] = useState(false);
@@ -185,33 +191,57 @@ const UserProfile: React.FC<UserProfileProps> = ({
           {/* Data Management Section */}
           <div className="bg-gray-900 rounded-lg p-4 space-y-4">
             <div>
-              <h3 className="text-lg font-semibold text-gray-200 mb-2">Data Management</h3>
+              <h3 className="text-lg font-semibold text-gray-200 mb-2">Gestione Dati</h3>
               <p className="text-sm text-gray-400 mb-4">
-                Import your collection from a JSON file or clear all data from the database.
+                Esporta/importa la tua libreria completa oppure importa set da JSON o cancella tutti i dati.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <ImportJsonButton 
-                onImport={onImportJson}
-                disabled={isLoading}
-              />
-              <ClearDatabaseButton 
-                onClear={onClearDatabase}
-                disabled={isLoading}
-              />
+            <div>
+              <h4 className="text-sm font-semibold text-gray-300 mb-2">Export/Import Libreria Completa</h4>
+              <p className="text-xs text-gray-400 mb-3">
+                Esporta tutti i set con tutti i dettagli (nome, tema, immagini) per trasferirli su un altro dispositivo.
+                L'importazione NON richiede chiamate API a Rebrickable.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <ExportLibraryButton
+                  onExport={onExportLibrary}
+                  disabled={isLoading}
+                />
+                <ImportLibraryButton
+                  onImport={onImportLibrary}
+                  disabled={isLoading}
+                />
+              </div>
             </div>
 
-            <div className="bg-gray-800 rounded-md p-3 text-xs text-gray-400">
-              <p className="font-semibold text-gray-300 mb-1">JSON Format Example:</p>
-              <pre className="overflow-x-auto">
+            <div className="border-t border-gray-700 pt-4">
+              <h4 className="text-sm font-semibold text-gray-300 mb-2">Import JSON / Cancella Database</h4>
+              <p className="text-xs text-gray-400 mb-3">
+                Importa set da file JSON (richiede sincronizzazione con Rebrickable) o cancella tutti i dati.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <ImportJsonButton
+                  onImport={onImportJson}
+                  disabled={isLoading}
+                />
+                <ClearDatabaseButton
+                  onClear={onClearDatabase}
+                  disabled={isLoading}
+                />
+              </div>
+
+              <div className="bg-gray-800 rounded-md p-3 text-xs text-gray-400 mt-3">
+                <p className="font-semibold text-gray-300 mb-1">JSON Format Example:</p>
+                <pre className="overflow-x-auto">
 {`{
   "lego_sets": [
     {"set_number": "76287"},
     {"set_number": "60411"}
   ]
 }`}
-              </pre>
+                </pre>
+              </div>
             </div>
           </div>
 
